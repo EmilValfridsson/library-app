@@ -1,19 +1,27 @@
-import { getArticles } from "../services/articleSerivce";
+import { useCategoryContext } from "../context/CategoryContext";
+import { useArticles } from "../hooks/useArticles";
+import { titleAbbreviation } from "../utils";
 
 export default function Table() {
-  const articles = getArticles();
-  function titleAbbreviation(title: string) {
-    const Abbreviation = title
-      .split(" ")
-      .map((word) => word.charAt(0))
-      .join("")
-      .toUpperCase();
-    return Abbreviation;
+  const { articles } = useArticles();
+  const { selectedCategory } = useCategoryContext();
+
+  let filteredArticles = articles;
+
+  if (selectedCategory.id) {
+    filteredArticles = articles.filter(
+      (a) => a.categoryId === selectedCategory.id
+    );
+  } else {
+    filteredArticles = articles;
   }
+  console.log(selectedCategory);
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto text-white">
+      <button className="btn btn-primary rounded mt-3">New Article</button>
+      <button className="btn btn-primary rounded mt-3 ml-3">Checkout</button>
+      <button className="btn btn-primary rounded mt-3 ml-3">Cart</button>
       <table className="table">
-        {/* head */}
         <thead>
           <tr>
             <th>Title</th>
@@ -27,17 +35,19 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          {articles.map((a) => (
-            <tr key={a.title}>
+          {filteredArticles.map((a) => (
+            <tr key={a.id}>
               <td>{`${a.title} (${titleAbbreviation(a.title)})`}</td>
-              <td>{a.categoryId}</td>
+              <td>{a.category.name}</td>
               <td>{a.type}</td>
-              <td>{a.isBorrowable ? "Yes" : "No"}</td>
+              <td>{a.isborrowable ? "Yes" : "No"}</td>
               <td>{a.author || "-"}</td>
-              <td>{a.nbrPages || "-"}</td>
-              <td>{a.runTimeMinutes || "-"}</td>
+              <td>{a.nbrpages || "-"}</td>
+              <td>{a.runtimeminutes || "-"}</td>
               <td>
-                <button className="btn btn-primary btn-sm">Delete</button>
+                <button className="btn btn-primary btn-sm rounded">
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
