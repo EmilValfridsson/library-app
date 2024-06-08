@@ -4,7 +4,9 @@ import Table from "../components/Table";
 export default function MainPage() {
   return (
     <div className="flex">
-      <Categories />
+      <div>
+        <Categories />
+      </div>
       <Table />
     </div>
   );

@@ -1,17 +1,34 @@
-export interface Articles {
+export interface Article {
+  id: string;
   title: string;
   author?: string;
-  nbrPages?: number;
-  runTimeMinutes?: number;
+  nbrpages?: number;
+  runtimeminutes?: number;
   type: string;
-  isBorrowable: boolean;
-  categoryId: number;
+  isborrowable: boolean;
+  category: Category;
+  categoryId: string;
 }
 
-export interface Dvd {
-  title: string;
-  runTimeMinutes: number;
-  type: string;
-  isBorrowable: boolean;
-  categoryId: number;
+export interface Category {
+  id: string;
+  name: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  username: string;
+  isAdmin: boolean;
+}
+
+export interface UserRegister {
+  name: string;
+  username: string;
+  password: string;
+}
+
+export interface UserLogin {
+  username: string;
+  password: string;
 }
