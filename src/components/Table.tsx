@@ -1,10 +1,32 @@
+import { useState } from "react";
 import { useCategoryContext } from "../context/CategoryContext";
 import { useArticles } from "../hooks/useArticles";
 import { titleAbbreviation } from "../utils";
+import _ from "lodash";
+
+import { SortCriteria, TextColumn } from "../types";
+
+const DEFAULT_SORT: SortCriteria = {
+  key: "category.name",
+  order: "asc",
+};
+
+const headers: TextColumn[] = [
+  { label: "Title", key: "title" },
+  { label: "Category", key: "category.name" },
+  { label: "Type", key: "type" },
+  { label: "Borrowable", key: "isborrowable" },
+  { label: "Author", key: "author" },
+  { label: "Pages", key: "nbrPages" },
+  { label: "Minutes", key: "runtimeminutes" },
+  { label: "Borrower", key: "borrower" },
+  { label: "BorrowDate", key: "borrowDate" },
+];
 
 export default function Table() {
   const { articles } = useArticles();
   const { selectedCategory } = useCategoryContext();
+  const [sortCriteria, setSortCriteria] = useState<SortCriteria>(DEFAULT_SORT);
 
   let filteredArticles = articles;
 
@@ -15,7 +37,24 @@ export default function Table() {
   } else {
     filteredArticles = articles;
   }
-  console.log(selectedCategory);
+
+  const sortedArticles = _.orderBy(
+    filteredArticles,
+    [sortCriteria.key],
+    [sortCriteria.order]
+  );
+  function handleSort(key: string) {
+    setSortCriteria((prevCriteria) => ({
+      key,
+      order: prevCriteria.order === "asc" ? "desc" : "asc",
+    }));
+  }
+  function renderSortIcon(column: TextColumn) {
+    if (column.key !== sortCriteria.key) return null;
+    if (sortCriteria.order === "asc")
+      return <i className="fa-solid fa-sort-down pl-2"></i>;
+    return <i className="fa-solid fa-sort-up pl-2"></i>;
+  }
   return (
     <div className="overflow-x-auto text-white">
       <button className="btn btn-primary rounded mt-3">New Article</button>
@@ -24,18 +63,16 @@ export default function Table() {
       <table className="table">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Type</th>
-            <th>Borrowable</th>
-            <th>Author</th>
-            <th>Pages</th>
-            <th>Minutes</th>
-            <th></th>
+            {headers.map((header) => (
+              <th key={header.key} onClick={() => handleSort(header.key)}>
+                {header.label}
+                {renderSortIcon(header)}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {filteredArticles.map((a) => (
+          {sortedArticles.map((a) => (
             <tr key={a.id}>
               <td>{`${a.title} (${titleAbbreviation(a.title)})`}</td>
               <td>{a.category.name}</td>
@@ -44,6 +81,8 @@ export default function Table() {
               <td>{a.author || "-"}</td>
               <td>{a.nbrpages || "-"}</td>
               <td>{a.runtimeminutes || "-"}</td>
+              <td>{a.borrow || "-"}</td>
+              <td>{a.borrowDate || "-"}</td>
               <td>
                 <button className="btn btn-primary btn-sm rounded">
                   Delete

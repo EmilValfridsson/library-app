@@ -8,6 +8,8 @@ export interface Article {
   isborrowable: boolean;
   category: Category;
   categoryId: string;
+  borrow: string;
+  borrowDate: number;
 }
 
 export interface Category {
@@ -31,4 +33,13 @@ export interface UserRegister {
 export interface UserLogin {
   username: string;
   password: string;
+}
+
+export interface SortCriteria {
+  key: string;
+  order: "asc" | "desc";
+}
+export interface TextColumn {
+  label: string;
+  key: string;
 }
