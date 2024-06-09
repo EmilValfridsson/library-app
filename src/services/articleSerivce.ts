@@ -13,6 +13,9 @@ export interface ArticleFormData {
   nbrpages?: number | undefined;
   runtimeminutes?: number | undefined;
 }
+export interface BorrowFormData {
+  borrower: string;
+}
 
 function articlesUrl(id?: string) {
   if (id) return `${API_BASEURL}/${id}`;
@@ -29,13 +32,19 @@ export function getArticle(id: string) {
 
 export function saveArticle(article: ArticleFormData) {
   if (article.id) return axios.put(articlesUrl(article.id), article);
+
   if (article.type === "DVD" || article.type === "AudioBook") {
-    return axios.post(articlesUrl() + "/item");
+    return axios.post(articlesUrl() + "/item", article);
   }
 
-  return axios.post(articlesUrl() + "/book");
+  return axios.post(articlesUrl() + "/book", article);
 }
 
 export function deleteArticle(id: string) {
   return axios.delete(articlesUrl(id));
+}
+
+export function borrowArticle(id: string, borrower?: BorrowFormData) {
+  if (borrower) return axios.put(articlesUrl() + `/borrow/${id}`, borrower);
+  return axios.put(articlesUrl() + `/borrow/${id}`);
 }

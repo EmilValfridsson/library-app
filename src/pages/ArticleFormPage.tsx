@@ -1,11 +1,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { getArticle, saveArticle } from "../services/articleSerivce";
 import { Article } from "../types";
 import { useCategories } from "../hooks/useCatgories";
+
 const schema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: "Title is required" }),
@@ -19,7 +20,9 @@ const schema = z.object({
     .gte(1, { message: "Min 1 minute" })
     .optional(),
   type: z.string().min(3, { message: "Type must be selected" }),
-  isborrowable: z.boolean({ message: "Borrowable must be selected" }),
+  isborrowable: z
+    .string({ message: "Borrowable must be selected" })
+    .transform((value) => value === "true"),
   categoryId: z.string().min(1, { message: "Category must be selected" }),
 });
 
@@ -31,12 +34,12 @@ export default function ArticleFormPage() {
     handleSubmit,
     reset,
     watch,
+
     formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     mode: "onChange",
   });
-  //   const [selectedType, setSelectedType] = useState("");
 
   const selectedType = watch("type", "");
 
@@ -81,13 +84,14 @@ export default function ArticleFormPage() {
   async function onSubmit(data: FormData) {
     console.log("submitted", data);
     await saveArticle(data);
+    navigate("/");
   }
 
   return (
     <div className="h-screen grid place-items-center place-content-center">
       <h1 className="mb-4 text-center font-bold text-3xl">New Article</h1>
       <div className="p-10 shadow rounded-3xl">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-3">
             <label className="form-label">Type</label>
             <select
@@ -139,6 +143,7 @@ export default function ArticleFormPage() {
                   className="select select-bordered w-full max-w-xs"
                   {...register("isborrowable")}
                 >
+                  <option />
                   <option value="true">True</option>
                   <option value="false">False</option>
                 </select>
@@ -155,7 +160,7 @@ export default function ArticleFormPage() {
                 <label className="form-label">RunTimeMinutes</label>
                 <input
                   className="input input-bordered w-full max-w-xs"
-                  {...register("runtimeminutes")}
+                  {...register("runtimeminutes", { valueAsNumber: true })}
                 />
                 {errors.runtimeminutes && (
                   <p className="text-error">{errors.runtimeminutes.message}</p>
@@ -180,7 +185,7 @@ export default function ArticleFormPage() {
                 <label className="form-label">Number of Pages</label>
                 <input
                   className="input input-bordered w-full max-w-xs"
-                  {...register("nbrpages")}
+                  {...register("nbrpages", { valueAsNumber: true })}
                 />
                 {errors.nbrpages && (
                   <p className="text-error">{errors.nbrpages.message}</p>

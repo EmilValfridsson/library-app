@@ -6,6 +6,7 @@ import MainPage from "./pages/MainPage";
 import Logout from "./components/logout";
 import ArticleFormPage from "./pages/ArticleFormPage";
 import CategoryFormPage from "./pages/CategoryFormPage";
+import BorrowFormPage from "./pages/BorrowFormPage";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
       { path: "newcategory", element: <CategoryFormPage /> },
       { path: "newarticle/:id", element: <ArticleFormPage /> },
       { path: "newcategory/:id", element: <CategoryFormPage /> },
+      { path: "borrow/:id", element: <BorrowFormPage /> },
     ],
   },
 ]);
