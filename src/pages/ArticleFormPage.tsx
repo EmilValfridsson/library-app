@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
@@ -33,7 +33,6 @@ export default function ArticleFormPage() {
     register,
     handleSubmit,
     reset,
-    watch,
 
     formState: { errors, isValid },
   } = useForm<FormData>({
@@ -41,7 +40,7 @@ export default function ArticleFormPage() {
     mode: "onChange",
   });
 
-  const selectedType = watch("type", "");
+  const [selectedType, setSelectedType] = useState("");
 
   const { categories } = useCategories();
   const navigate = useNavigate();
@@ -56,6 +55,7 @@ export default function ArticleFormPage() {
       if (!article) return;
 
       reset(mapToFormData(article));
+      setSelectedType(article.type);
     }
     fetch();
   }, []);
@@ -98,6 +98,7 @@ export default function ArticleFormPage() {
               id="type"
               className="select select-bordered w-full max-w-xs"
               {...register("type")}
+              onChange={(e) => setSelectedType(e.target.value)}
             >
               <option value="">Choose Type</option>
               <option value="DVD">DVD</option>
