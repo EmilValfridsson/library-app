@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../services";
+import { useUserContext } from "../context/UserContext";
 
 const schema = z.object({
   username: z
@@ -22,18 +23,19 @@ export default function LoginPage() {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
   const navigate = useNavigate();
   const user = auth.getCurrentUser();
-  console.log(user);
+  const { setUser } = useUserContext();
   async function onSubmit(data: FormData) {
     try {
       await auth.login(data);
-      console.log(data);
+      const isUser = await auth.getCurrentUser();
+      setUser(isUser);
       navigate("");
     } catch (error: any) {
       setError("username", { message: error.response.data });
     }
   }
 
-  if (user) return <Navigate to="/" />;
+  if (user) navigate("/");
 
   return (
     <div className="h-screen grid place-items-center place-content-center">
