@@ -1,5 +1,6 @@
 import { PropsWithChildren, createContext, useContext, useState } from "react";
 import { Category } from "../types";
+import { useSearchContext } from "./SearchContext";
 
 interface CategoryContextType {
   DEFAULT_CATEGORIES: Category;
@@ -17,9 +18,11 @@ export default function CategoryProvider({ children }: PropsWithChildren) {
   };
 
   const [selectedCategory, setSelectedCategory] = useState(DEFAULT_CATEGORIES);
+  const { setSearchValue } = useSearchContext();
 
   function handleCategory(category: Category) {
     setSelectedCategory(category);
+    setSearchValue("");
   }
   const value: CategoryContextType = {
     DEFAULT_CATEGORIES,
