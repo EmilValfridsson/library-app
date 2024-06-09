@@ -4,6 +4,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MainPage from "./pages/MainPage";
 import Logout from "./components/logout";
+import ArticleFormPage from "./pages/ArticleFormPage";
+import CategoryFormPage from "./pages/CategoryFormPage";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +16,10 @@ const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "logout", element: <Logout /> },
+      { path: "newarticle", element: <ArticleFormPage /> },
+      { path: "newcategory", element: <CategoryFormPage /> },
+      { path: "newarticle/:id", element: <ArticleFormPage /> },
+      { path: "newcategory/:id", element: <CategoryFormPage /> },
     ],
   },
 ]);

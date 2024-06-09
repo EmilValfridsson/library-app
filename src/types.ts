@@ -8,7 +8,7 @@ export interface Article {
   isborrowable: boolean;
   category: Category;
   categoryId: string;
-  borrow: string;
+  borrower: string;
   borrowDate: number;
 }
 

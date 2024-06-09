@@ -1,10 +1,15 @@
 import { useCategoryContext } from "../context/CategoryContext";
 import { useCategories } from "../hooks/useCatgories";
+import { deleteCategory } from "../services/categoryService";
 
 export default function Categories() {
-  const categories = useCategories();
+  const { categories, setCategories } = useCategories();
   const { DEFAULT_CATEGORIES, handleCategory } = useCategoryContext();
-
+  async function handleDelete(id: string) {
+    const newCategories = categories.filter((c) => c.id !== id);
+    setCategories(newCategories);
+    await deleteCategory(id);
+  }
   return (
     <ul className="m-3 p-4 bg-primary w-40 rounded text-black">
       <button
@@ -22,7 +27,10 @@ export default function Categories() {
             >
               {c.name}
             </button>
-            <button className="text-right text-red-500 hover:text-red-700">
+            <button
+              className="text-right text-red-500 hover:text-red-700"
+              onClick={() => handleDelete(c.id)}
+            >
               X
             </button>
           </div>

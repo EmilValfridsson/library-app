@@ -12,5 +12,5 @@ export function useCategories() {
     fetch();
   }, []);
 
-  return categories;
+  return { categories, setCategories };
 }
