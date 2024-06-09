@@ -5,6 +5,8 @@ import { titleAbbreviation } from "../utils";
 import _ from "lodash";
 
 import { SortCriteria, TextColumn } from "../types";
+import { Link } from "react-router-dom";
+import { deleteArticle } from "../services/articleSerivce";
 
 const DEFAULT_SORT: SortCriteria = {
   key: "category.name",
@@ -24,9 +26,15 @@ const headers: TextColumn[] = [
 ];
 
 export default function Table() {
-  const { articles } = useArticles();
+  const { articles, setArticles } = useArticles();
   const { selectedCategory } = useCategoryContext();
   const [sortCriteria, setSortCriteria] = useState<SortCriteria>(DEFAULT_SORT);
+
+  async function handleDelete(id: string) {
+    const newArticles = articles.filter((a) => a.id !== id);
+    setArticles(newArticles);
+    await deleteArticle(id);
+  }
 
   let filteredArticles = articles;
 
@@ -57,9 +65,13 @@ export default function Table() {
   }
   return (
     <div className="overflow-x-auto text-white">
-      <button className="btn btn-primary rounded mt-3">New Article</button>
-      <button className="btn btn-primary rounded mt-3 ml-3">Checkout</button>
-      <button className="btn btn-primary rounded mt-3 ml-3">Cart</button>
+      <Link to="newcategory" className="btn btn-primary rounded mt-3">
+        New Category
+      </Link>
+      <Link to="newarticle" className="btn btn-primary rounded m-3">
+        New Article
+      </Link>
+
       <table className="table">
         <thead>
           <tr>
@@ -74,17 +86,28 @@ export default function Table() {
         <tbody>
           {sortedArticles.map((a) => (
             <tr key={a.id}>
-              <td>{`${a.title} (${titleAbbreviation(a.title)})`}</td>
-              <td>{a.category.name}</td>
+              <td>
+                <Link to={`newarticle/${a.id}`}>{`${
+                  a.title
+                } (${titleAbbreviation(a.title)})`}</Link>
+              </td>
+              <td>
+                <Link to={`newcategory/${a.categoryId}`}>
+                  {a.category.name}
+                </Link>
+              </td>
               <td>{a.type}</td>
               <td>{a.isborrowable ? "Yes" : "No"}</td>
               <td>{a.author || "-"}</td>
               <td>{a.nbrpages || "-"}</td>
               <td>{a.runtimeminutes || "-"}</td>
-              <td>{a.borrow || "-"}</td>
+              <td>{a.borrower || "-"}</td>
               <td>{a.borrowDate || "-"}</td>
               <td>
-                <button className="btn btn-primary btn-sm rounded">
+                <button
+                  onClick={() => handleDelete(a.id)}
+                  className="btn btn-primary btn-sm rounded"
+                >
                   Delete
                 </button>
               </td>
