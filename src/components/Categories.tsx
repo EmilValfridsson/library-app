@@ -1,11 +1,17 @@
 import { useCategoryContext } from "../context/CategoryContext";
+import { useArticles } from "../hooks/useArticles";
 import { useCategories } from "../hooks/useCatgories";
 import { deleteCategory } from "../services/categoryService";
 
 export default function Categories() {
   const { categories, setCategories } = useCategories();
   const { DEFAULT_CATEGORIES, handleCategory } = useCategoryContext();
+  const { articles } = useArticles();
+
   async function handleDelete(id: string) {
+    const articlesInCategory = articles.find((a) => a.categoryId === id);
+    if (articlesInCategory)
+      return console.log("Category must be empty from articles");
     const newCategories = categories.filter((c) => c.id !== id);
     setCategories(newCategories);
     await deleteCategory(id);

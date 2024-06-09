@@ -8,8 +8,8 @@ export interface Article {
   isborrowable: boolean;
   category: Category;
   categoryId: string;
-  borrower: string;
-  borrowDate: number;
+  borrower: string | null;
+  borrowDate: number | null;
 }
 
 export interface Category {
