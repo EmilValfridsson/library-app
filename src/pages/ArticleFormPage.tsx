@@ -1,0 +1,201 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { z } from "zod";
+import { getArticle, saveArticle } from "../services/articleSerivce";
+import { Article } from "../types";
+import { useCategories } from "../hooks/useCatgories";
+const schema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(3, { message: "Title is required" }),
+  author: z.string().min(3, { message: "Author is required." }).optional(),
+  nbrpages: z
+    .number({ invalid_type_error: "Must be a number." })
+    .gte(1, { message: "Min 1 page" })
+    .optional(),
+  runtimeminutes: z
+    .number({ invalid_type_error: "Must be a number." })
+    .gte(1, { message: "Min 1 minute" })
+    .optional(),
+  type: z.string().min(3, { message: "Type must be selected" }),
+  isborrowable: z.boolean({ message: "Borrowable must be selected" }),
+  categoryId: z.string().min(1, { message: "Category must be selected" }),
+});
+
+type FormData = z.infer<typeof schema>;
+
+export default function ArticleFormPage() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    mode: "onChange",
+  });
+  //   const [selectedType, setSelectedType] = useState("");
+
+  const selectedType = watch("type", "");
+
+  const { categories } = useCategories();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    async function fetch() {
+      if (!id) return;
+
+      const { data: article } = await getArticle(id);
+
+      if (!article) return;
+
+      reset(mapToFormData(article));
+    }
+    fetch();
+  }, []);
+
+  function mapToFormData(article: Article) {
+    if (article.type === "DVD" || article.type === "Audiobook") {
+      return {
+        id: article.id,
+        title: article.title,
+        type: article.type,
+        categoryId: article.categoryId,
+        runtimeminutes: article.runtimeminutes,
+        isborrowable: article.isborrowable,
+      };
+    }
+    return {
+      id: article.id,
+      title: article.title,
+      type: article.type,
+      categoryId: article.categoryId,
+      author: article.author,
+      nbrpages: article.nbrpages,
+      isborrowable: article.isborrowable,
+    };
+  }
+  async function onSubmit(data: FormData) {
+    console.log("submitted", data);
+    await saveArticle(data);
+  }
+
+  return (
+    <div className="h-screen grid place-items-center place-content-center">
+      <h1 className="mb-4 text-center font-bold text-3xl">New Article</h1>
+      <div className="p-10 shadow rounded-3xl">
+        <form>
+          <div className="mb-3">
+            <label className="form-label">Type</label>
+            <select
+              id="type"
+              className="select select-bordered w-full max-w-xs"
+              {...register("type")}
+            >
+              <option value="">Choose Type</option>
+              <option value="DVD">DVD</option>
+              <option value="Audiobook">Audiobook</option>
+              <option value="Dictionary">Dictionary</option>
+              <option value="Book">Book</option>
+            </select>
+            {errors.type && <p className="text-error">{errors.type.message}</p>}
+          </div>
+
+          {selectedType && (
+            <>
+              <div className="mb-3">
+                <label className="form-label">Title</label>
+                <input
+                  className="input input-bordered w-full max-w-xs"
+                  {...register("title")}
+                />
+                {errors.title && (
+                  <p className="text-error">{errors.title.message}</p>
+                )}
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Category</label>
+                <select
+                  className="select select-bordered w-full max-w-xs"
+                  {...register("categoryId")}
+                >
+                  <option />
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.categoryId && (
+                  <p className="text-error">{errors.categoryId.message}</p>
+                )}
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Borrowable</label>
+                <select
+                  className="select select-bordered w-full max-w-xs"
+                  {...register("isborrowable")}
+                >
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+                {errors.isborrowable && (
+                  <p className="text-error">{errors.isborrowable.message}</p>
+                )}
+              </div>
+            </>
+          )}
+
+          {(selectedType === "DVD" || selectedType === "Audiobook") && (
+            <>
+              <div className="mb-3">
+                <label className="form-label">RunTimeMinutes</label>
+                <input
+                  className="input input-bordered w-full max-w-xs"
+                  {...register("runtimeminutes")}
+                />
+                {errors.runtimeminutes && (
+                  <p className="text-error">{errors.runtimeminutes.message}</p>
+                )}
+              </div>
+            </>
+          )}
+
+          {(selectedType === "Book" || selectedType === "Dictionary") && (
+            <>
+              <div className="mb-3">
+                <label className="form-label">Author</label>
+                <input
+                  className="input input-bordered w-full max-w-xs"
+                  {...register("author")}
+                />
+                {errors.author && (
+                  <p className="text-error">{errors.author.message}</p>
+                )}
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Number of Pages</label>
+                <input
+                  className="input input-bordered w-full max-w-xs"
+                  {...register("nbrpages")}
+                />
+                {errors.nbrpages && (
+                  <p className="text-error">{errors.nbrpages.message}</p>
+                )}
+              </div>
+            </>
+          )}
+
+          <div className="d-grid justify-content-center mt-4">
+            <button className="btn btn-primary" disabled={!isValid}>
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
