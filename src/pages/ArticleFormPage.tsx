@@ -144,14 +144,15 @@ export default function ArticleFormPage() {
                   className="select select-bordered w-full max-w-xs"
                   {...register("isBorrowable")}
                 >
-                  {selectedType !== "Dictionary" && (
+                  {selectedType !== "Dictionary" ? (
                     <>
                       <option />
                       <option value="true">True</option>
                       <option value="false">False</option>
                     </>
+                  ) : (
+                    <option value="false">False</option>
                   )}
-                  <option value="false">False</option>
                 </select>
                 {errors.isBorrowable && (
                   <p className="text-error">{errors.isBorrowable.message}</p>

@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import { useCategoryContext } from "../context/CategoryContext";
 import { useUserContext } from "../context/UserContext";
 import { useArticles } from "../hooks/useArticles";
@@ -13,7 +14,7 @@ export default function Categories() {
   async function handleDelete(id: string) {
     const articlesInCategory = articles.find((a) => a.categoryId === id);
     if (articlesInCategory)
-      return console.log("Category must be empty from articles");
+      return toast.error("Category must be empty from articles");
     const newCategories = categories.filter((c) => c.id !== id);
     setCategories(newCategories);
     await deleteCategory(id);
