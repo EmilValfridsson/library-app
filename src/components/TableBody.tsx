@@ -3,7 +3,7 @@ import { textAbbreviation } from "../utils";
 import { useArticles } from "../hooks/useArticles";
 import { useCategoryContext } from "../context/CategoryContext";
 import { useSearchContext } from "../context/SearchContext";
-import { useSortContext } from "../context/sortContext";
+import { useSortContext } from "../context/SortContext";
 import { borrowArticle, deleteArticle } from "../services/articleSerivce";
 import _ from "lodash";
 import { useUserContext } from "../context/UserContext";

@@ -1,5 +1,5 @@
 import { TextColumn } from "../types";
-import { useSortContext } from "../context/sortContext";
+import { useSortContext } from "../context/SortContext";
 
 const headers: TextColumn[] = [
   { label: "Title", key: "title" },
