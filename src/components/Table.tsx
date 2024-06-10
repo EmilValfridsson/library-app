@@ -9,7 +9,7 @@ export default function Table() {
 
   return (
     <div className="overflow-x-auto text-white">
-      {user?.isAdmin && (
+      {user && (
         <>
           <Link to="newcategory" className="btn btn-primary rounded mt-3">
             New Category
