@@ -6,3 +6,9 @@ export function textAbbreviation(text: string) {
     .toUpperCase();
   return `${text} (${Abbreviation})`;
 }
+
+export function log(message: string) {
+  if (process.env.NODE_ENV === "devlopment") {
+    console.log(message);
+  }
+}

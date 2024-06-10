@@ -1,7 +1,8 @@
 import axios from "axios";
 import { Article } from "../types";
+import { BASE_URL } from "../constants";
 
-const API_BASEURL = "http://localhost:5588/api/articles";
+const API_ENDPOINT = `${BASE_URL}/api/articles`;
 
 export interface ArticleFormData {
   title: string;
@@ -18,8 +19,8 @@ export interface BorrowFormData {
 }
 
 function articlesUrl(id?: string) {
-  if (id) return `${API_BASEURL}/${id}`;
-  return API_BASEURL;
+  if (id) return `${API_ENDPOINT}/${id}`;
+  return API_ENDPOINT;
 }
 
 export function getArticles() {

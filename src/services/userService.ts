@@ -1,10 +1,11 @@
 import axios from "axios";
 import { UserRegister } from "../types";
+import { BASE_URL } from "../constants";
 
-const API_BASEURL = "http://localhost:5588/api/users";
+const API_ENDPOINT = `${BASE_URL}/api/users`;
 
 async function register(user: UserRegister) {
-  const { data } = await axios.post(API_BASEURL, user);
+  const { data } = await axios.post(API_ENDPOINT, user);
 
   return data;
 }
