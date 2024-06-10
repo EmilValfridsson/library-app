@@ -6,12 +6,12 @@ const API_BASEURL = "http://localhost:5588/api/articles";
 export interface ArticleFormData {
   title: string;
   type: string;
-  isborrowable: boolean;
+  isBorrowable: boolean;
   categoryId: string;
   id?: string | undefined;
   author?: string | undefined;
-  nbrpages?: number | undefined;
-  runtimeminutes?: number | undefined;
+  nbrPages?: number | undefined;
+  runTimeMinutes?: number | undefined;
 }
 export interface BorrowFormData {
   borrower: string;

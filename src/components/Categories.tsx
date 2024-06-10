@@ -36,7 +36,7 @@ export default function Categories() {
             >
               {c.name}
             </button>
-            {user && (
+            {user?.isAdmin && (
               <button
                 className="text-right text-red-500 hover:text-red-700"
                 onClick={() => handleDelete(c.id)}

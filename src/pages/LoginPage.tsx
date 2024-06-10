@@ -29,7 +29,7 @@ export default function LoginPage() {
       await auth.login(data);
       const isUser = await auth.getCurrentUser();
       setUser(isUser);
-      navigate("");
+      navigate("/");
     } catch (error: any) {
       setError("username", { message: error.response.data });
     }

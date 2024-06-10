@@ -24,7 +24,7 @@ export default function BorrowFormPage() {
 
   const borrowedArticle = articles.find((a) => a.id === id);
 
-  if (borrowedArticle?.isborrowable === false) navigate("/");
+  if (borrowedArticle?.isBorrowable === false) navigate("/");
 
   async function onSubmit(data: FormData) {
     console.log("submitted", data);

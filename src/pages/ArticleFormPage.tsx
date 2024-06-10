@@ -11,16 +11,16 @@ const schema = z.object({
   id: z.string().optional(),
   title: z.string().min(3, { message: "Title is required" }),
   author: z.string().min(3, { message: "Author is required." }).optional(),
-  nbrpages: z
+  nbrPages: z
     .number({ invalid_type_error: "Must be a number." })
     .gte(1, { message: "Min 1 page" })
     .optional(),
-  runtimeminutes: z
+  runTimeMinutes: z
     .number({ invalid_type_error: "Must be a number." })
     .gte(1, { message: "Min 1 minute" })
     .optional(),
   type: z.string().min(3, { message: "Type must be selected" }),
-  isborrowable: z
+  isBorrowable: z
     .string({ message: "Borrowable must be selected" })
     .transform((value) => value === "true"),
   categoryId: z.string().min(1, { message: "Category must be selected" }),
@@ -67,8 +67,8 @@ export default function ArticleFormPage() {
         title: article.title,
         type: article.type,
         categoryId: article.categoryId,
-        runtimeminutes: article.runtimeminutes,
-        isborrowable: article.isborrowable,
+        runTimeMinutes: article.runTimeMinutes,
+        isBorrowable: article.isBorrowable,
       };
     }
     return {
@@ -77,8 +77,8 @@ export default function ArticleFormPage() {
       type: article.type,
       categoryId: article.categoryId,
       author: article.author,
-      nbrpages: article.nbrpages,
-      isborrowable: article.isborrowable,
+      nbrpages: article.nbrPages,
+      isborrowable: article.isBorrowable,
     };
   }
   async function onSubmit(data: FormData) {
@@ -142,14 +142,19 @@ export default function ArticleFormPage() {
                 <label className="form-label">Borrowable</label>
                 <select
                   className="select select-bordered w-full max-w-xs"
-                  {...register("isborrowable")}
+                  {...register("isBorrowable")}
                 >
-                  <option />
-                  <option value="true">True</option>
+                  {selectedType !== "Dictionary" && (
+                    <>
+                      <option />
+                      <option value="true">True</option>
+                      <option value="false">False</option>
+                    </>
+                  )}
                   <option value="false">False</option>
                 </select>
-                {errors.isborrowable && (
-                  <p className="text-error">{errors.isborrowable.message}</p>
+                {errors.isBorrowable && (
+                  <p className="text-error">{errors.isBorrowable.message}</p>
                 )}
               </div>
             </>
@@ -161,10 +166,10 @@ export default function ArticleFormPage() {
                 <label className="form-label">RunTimeMinutes</label>
                 <input
                   className="input input-bordered w-full max-w-xs"
-                  {...register("runtimeminutes", { valueAsNumber: true })}
+                  {...register("runTimeMinutes", { valueAsNumber: true })}
                 />
-                {errors.runtimeminutes && (
-                  <p className="text-error">{errors.runtimeminutes.message}</p>
+                {errors.runTimeMinutes && (
+                  <p className="text-error">{errors.runTimeMinutes.message}</p>
                 )}
               </div>
             </>
@@ -186,10 +191,10 @@ export default function ArticleFormPage() {
                 <label className="form-label">Number of Pages</label>
                 <input
                   className="input input-bordered w-full max-w-xs"
-                  {...register("nbrpages", { valueAsNumber: true })}
+                  {...register("nbrPages", { valueAsNumber: true })}
                 />
-                {errors.nbrpages && (
-                  <p className="text-error">{errors.nbrpages.message}</p>
+                {errors.nbrPages && (
+                  <p className="text-error">{errors.nbrPages.message}</p>
                 )}
               </div>
             </>

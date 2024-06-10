@@ -2,10 +2,10 @@ export interface Article {
   id: string;
   title: string;
   author?: string;
-  nbrpages?: number;
-  runtimeminutes?: number;
+  nbrPages?: number;
+  runTimeMinutes?: number;
   type: string;
-  isborrowable: boolean;
+  isBorrowable: boolean;
   category: Category;
   categoryId: string;
   borrower: string | null;

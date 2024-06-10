@@ -1,9 +1,8 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { auth, user } from "../services";
+import { user } from "../services";
 import { useNavigate } from "react-router-dom";
-import { useUserContext } from "../context/UserContext";
 
 const schema = z.object({
   name: z.string(),
@@ -27,13 +26,11 @@ export default function RegisterPage() {
     formState: { errors, isValid },
   } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onChange" });
   const navigate = useNavigate();
-  const { setUser } = useUserContext();
   async function onSubmit(data: FormData) {
     try {
       await user.register(data);
-      const isUser = await auth.getCurrentUser();
-      setUser(isUser);
-      navigate("");
+
+      navigate("/");
     } catch (error: any) {
       if (error.response.status === 400) {
         setError("username", { message: error.response.data });

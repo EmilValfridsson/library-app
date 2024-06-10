@@ -77,13 +77,13 @@ export default function TableBody() {
             </Link>
           </td>
           <td>{a.type}</td>
-          <td>{a.isborrowable ? "Yes" : "No"}</td>
+          <td>{a.isBorrowable ? "Yes" : "No"}</td>
           <td>{a.author || "-"}</td>
-          <td>{a.nbrpages || "-"}</td>
-          <td>{a.runtimeminutes || "-"}</td>
+          <td>{a.nbrPages || "-"}</td>
+          <td>{a.runTimeMinutes || "-"}</td>
           <td>{a.borrower || "-"}</td>
           <td>{a.borrowDate || "-"}</td>
-          {user && (
+          {user?.isAdmin && (
             <>
               <td>
                 <button
@@ -99,7 +99,7 @@ export default function TableBody() {
                     Not Loanable
                   </button>
                 )}
-                {!a.borrower && a.isborrowable && (
+                {!a.borrower && a.isBorrowable && (
                   <Link
                     to={`borrow/${a.id}`}
                     className="btn btn-primary btn-sm rounded"
@@ -107,7 +107,7 @@ export default function TableBody() {
                     Borrow
                   </Link>
                 )}
-                {a.borrower && !a.isborrowable && (
+                {a.borrower && !a.isBorrowable && (
                   <button
                     onClick={() => handleReturn(a.id)}
                     className="btn btn-success btn-sm rounded"
