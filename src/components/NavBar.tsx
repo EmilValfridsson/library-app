@@ -11,9 +11,14 @@ export default function NavBar() {
           ILB
         </NavLink>
         {!user ? (
-          <NavLink to={"/login"} className="btn btn-ghost text-xl">
-            Login
-          </NavLink>
+          <>
+            <NavLink to={"/login"} className="btn btn-ghost text-xl">
+              Login
+            </NavLink>
+            <NavLink to={"/register"} className="btn btn-ghost text-xl">
+              Register
+            </NavLink>
+          </>
         ) : (
           <>
             <a className="btn btn-ghost text-xl">{user.name}</a>
@@ -22,18 +27,6 @@ export default function NavBar() {
             </NavLink>
           </>
         )}
-        {/* {user && (
-          <>
-            <a className="btn btn-ghost text-xl">{user.name}</a>
-            <NavLink to={"/logout"} className="btn btn-ghost text-xl">
-              Logout
-            </NavLink>
-          </>
-        )} */}
-
-        <NavLink to={"/register"} className="btn btn-ghost text-xl">
-          Register
-        </NavLink>
       </div>
     </div>
   );

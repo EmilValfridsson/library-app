@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { titleAbbreviation } from "../utils";
+import { textAbbreviation } from "../utils";
 import { useArticles } from "../hooks/useArticles";
 import { useCategoryContext } from "../context/CategoryContext";
 import { useSearchContext } from "../context/SearchContext";
@@ -62,9 +62,9 @@ export default function TableBody() {
       {sortedArticles.map((a) => (
         <tr key={a.id}>
           <td>
-            <Link className="hover:underline" to={`newarticle/${a.id}`}>{`${
-              a.title
-            } (${titleAbbreviation(a.title)})`}</Link>
+            <Link className="hover:underline" to={`newarticle/${a.id}`}>
+              {textAbbreviation(a.title)}
+            </Link>
           </td>
           <td>
             <Link
