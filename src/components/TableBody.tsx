@@ -83,7 +83,7 @@ export default function TableBody() {
           <td>{a.runTimeMinutes || "-"}</td>
           <td>{a.borrower || "-"}</td>
           <td>{a.borrowDate || "-"}</td>
-          {user?.isAdmin && (
+          {user && (
             <>
               <td>
                 <button

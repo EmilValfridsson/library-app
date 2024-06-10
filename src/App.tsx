@@ -5,6 +5,7 @@ import SearchProvider from "./context/SearchContext";
 
 import UserProvider from "./context/UserContext";
 import SortProvider from "./context/SortContext";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <SortProvider>
               <NavBar />
               <Outlet />
+              <ToastContainer />
             </SortProvider>
           </CategoryProvider>
         </SearchProvider>

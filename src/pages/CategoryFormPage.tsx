@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { getCategory, saveCategory } from "../services/categoryService";
 import { useEffect } from "react";
+import { useCategories } from "../hooks/useCatgories";
+import { toast } from "react-toastify";
 
 const schema = z.object({
   id: z.string().optional(),
@@ -20,10 +22,9 @@ export default function CategoryFormPage() {
     formState: { errors, isValid },
   } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onChange" });
 
+  const { categories } = useCategories();
   const { id } = useParams();
   const navigate = useNavigate();
-
-  console.log(id);
 
   useEffect(() => {
     async function fetch() {
@@ -35,7 +36,8 @@ export default function CategoryFormPage() {
   }, []);
 
   async function onSubmit(data: FormData) {
-    console.log("submitted", data);
+    const category = categories.find((c) => c.name === data.name);
+    if (category) return toast.error("Category already exist");
     await saveCategory(data);
     navigate("/");
   }
