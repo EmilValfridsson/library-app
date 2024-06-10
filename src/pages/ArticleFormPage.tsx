@@ -77,7 +77,7 @@ export default function ArticleFormPage() {
       type: article.type,
       categoryId: article.categoryId,
       author: article.author,
-      nbrpages: article.nbrPages,
+      nbrPages: article.nbrPages,
       isborrowable: article.isBorrowable,
     };
   }
