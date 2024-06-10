@@ -6,12 +6,14 @@ import { useSearchContext } from "../context/SearchContext";
 import { useSortContext } from "../context/sortContext";
 import { borrowArticle, deleteArticle } from "../services/articleSerivce";
 import _ from "lodash";
+import { useUserContext } from "../context/UserContext";
 
 export default function TableBody() {
   const { articles, setArticles } = useArticles();
   const { selectedCategory } = useCategoryContext();
   const { searchValue } = useSearchContext();
   const { sortCriteria } = useSortContext();
+  const { user } = useUserContext();
 
   async function handleDelete(id: string) {
     const newArticles = articles.filter((a) => a.id !== id);
@@ -81,37 +83,41 @@ export default function TableBody() {
           <td>{a.runtimeminutes || "-"}</td>
           <td>{a.borrower || "-"}</td>
           <td>{a.borrowDate || "-"}</td>
-          <td>
-            <button
-              onClick={() => handleDelete(a.id)}
-              className="btn btn-primary btn-sm rounded"
-            >
-              Delete
-            </button>
-          </td>
-          <td>
-            {a.type === "Dictionary" && (
-              <button className="btn btn-primary btn-sm rounded" disabled>
-                Not Loanable
-              </button>
-            )}
-            {!a.borrower && a.isborrowable && (
-              <Link
-                to={`borrow/${a.id}`}
-                className="btn btn-primary btn-sm rounded"
-              >
-                Borrow
-              </Link>
-            )}
-            {a.borrower && !a.isborrowable && (
-              <button
-                onClick={() => handleReturn(a.id)}
-                className="btn btn-success btn-sm rounded"
-              >
-                return
-              </button>
-            )}
-          </td>
+          {user && (
+            <>
+              <td>
+                <button
+                  onClick={() => handleDelete(a.id)}
+                  className="btn btn-primary btn-sm rounded"
+                >
+                  Delete
+                </button>
+              </td>
+              <td>
+                {a.type === "Dictionary" && (
+                  <button className="btn btn-primary btn-sm rounded" disabled>
+                    Not Loanable
+                  </button>
+                )}
+                {!a.borrower && a.isborrowable && (
+                  <Link
+                    to={`borrow/${a.id}`}
+                    className="btn btn-primary btn-sm rounded"
+                  >
+                    Borrow
+                  </Link>
+                )}
+                {a.borrower && !a.isborrowable && (
+                  <button
+                    onClick={() => handleReturn(a.id)}
+                    className="btn btn-success btn-sm rounded"
+                  >
+                    return
+                  </button>
+                )}
+              </td>
+            </>
+          )}
         </tr>
       ))}
     </tbody>
